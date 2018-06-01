@@ -45,13 +45,8 @@ Nodo arbol;
 
                 for (int n:numeros
                      ) {
-
-                    if(arbol==null) {
-                      arbol=setnodo( n);
-                    }else{
-                          arbol.hijos= sethijos(arbol.hijos,setnodo(n));
-                    }
-                }
+                          arbol= sethijos(arbol,n);
+                       }
                 salida.setText(arbol.toString(1));
                 /***********************/
             }
@@ -59,31 +54,26 @@ Nodo arbol;
     }
 
     boolean establecido=false;
-    Nodo[] sethijos(Nodo[] nodo,Nodo hijo){
+    Nodo sethijos(Nodo nodo,int valor){
        establecido=false;
         while (establecido!=true){
             if(nodo==null){
-                nodo=new Nodo[2];
-            }else{
-                if(nodo[0]==null){
-                    nodo[0]= hijo;
-                    establecido=true;
-                }else if(nodo[1]==null){
-                    nodo[1]= hijo;
-                    establecido=true;
+                nodo=setnodo(valor);
+                establecido=true;
+            }else {
+                if (nodo.hijos[0] == null) {
+                    nodo.hijos[0] = sethijos(nodo.hijos[0], valor);
+                    establecido = true;
+                } else if (nodo.hijos[1] == null) {
+                    nodo.hijos[1] = sethijos(nodo.hijos[1], valor);
+                    establecido = true;
                 }else{
-                    if(nodo[0]==null) {
-                        nodo[0].hijos = sethijos(nodo[0].hijos, hijo);
-                        establecido = true;
-                    } else
-                    if(nodo[1]==null) {
-                        nodo[1].hijos = sethijos(nodo[1].hijos, hijo);
-                        establecido = true;
-                    }else{
-                        for (Nodo item:nodo
-                             ) {
-                            item.hijos=sethijos(item.hijos,hijo);
-                        }
+                    if(isnull(nodo.hijos[0])!=-1){
+                        nodo.hijos[0].hijos[isnull(nodo.hijos[0])]=sethijos(nodo.hijos[0],valor);
+                        establecido=true;
+                    }else  if(isnull(nodo.hijos[1])!=-1){
+                        nodo.hijos[1].hijos[isnull(nodo.hijos[1])]=sethijos(nodo.hijos[1],valor);
+                        establecido=true;
                     }
                 }
             }
@@ -91,13 +81,16 @@ Nodo arbol;
         return nodo;
     }
 
-   boolean hijosnull(Nodo[] nodo){
-        if((nodo[0]==null)||(nodo[1]==null)){
-            return true;
+int isnull(Nodo n){
+        if(n.hijos[0]==null){
+            return  0;
+        }else if(n.hijos[1]==null){
+            return 1;
         }else{
-            return false;
+            return -1;
         }
-   }
+}
+
     Nodo setnodo(int valor){
         Nodo nodo=new Nodo(valor,new Nodo[2]);
         return nodo;
